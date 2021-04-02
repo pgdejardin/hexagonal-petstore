@@ -1,6 +1,7 @@
 package org.example.infrastructure.pets.repository
 
 import arrow.core.Either
+import arrow.core.right
 import org.example.domain.PetErrors
 import org.example.domain.pets.Pet
 import org.example.domain.pets.adapter.PetRepository
@@ -14,14 +15,14 @@ object InMemoryPetRepository : PetRepository {
 
   override fun create(pet: Pet): Either<PetErrors, Pet> {
     val petEntry = Either.catch { pet.toPetEntry() }.mapLeft { PetErrors.PetHasNoId }
-    when (petEntry) {
+    return when (petEntry) {
       is Either.Right -> {
-        store[petEntry.value.id] = petEntry.value
+        Either.catch { store[petEntry.value.id] = petEntry.value }.mapLeft { PetErrors.CannotSavePetInDB }
       }
       else -> {
+        Unit.right()
       }
-    }
-    return petEntry.map { pet }
+    }.map { pet }
   }
 }
 
