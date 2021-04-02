@@ -4,8 +4,12 @@ import org.example.domain.pets.NewPets
 import org.example.domain.pets.PetEnvironment
 import org.example.infrastructure.pets.api.PetRestEndpoints
 import org.example.infrastructure.pets.repository.InMemoryPetRepository
+import org.http4k.core.Method
 import org.http4k.core.then
+import org.http4k.filter.AllowAllOriginPolicy
+import org.http4k.filter.CorsPolicy
 import org.http4k.filter.DebuggingFilters
+import org.http4k.filter.ServerFilters
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.SunHttp
@@ -21,11 +25,9 @@ fun main() {
   // APIs
   val petApi = PetRestEndpoints(newPets)
 
-  val app = DebuggingFilters.PrintRequestAndResponse().then(
-    routes(
-      "/pets" bind petApi.endpoints
-    )
-  )
+  val app = DebuggingFilters.PrintRequestAndResponse()
+    .then(ServerFilters.Cors(CorsPolicy(AllowAllOriginPolicy, listOf("Authorization"), Method.values().toList(), true)))
+    .then(routes("/pets" bind petApi.endpoints))
 
   app.asServer(SunHttp(9000)).start()
 }
