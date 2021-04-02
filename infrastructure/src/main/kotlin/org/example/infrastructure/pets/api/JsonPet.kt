@@ -4,7 +4,8 @@ import org.example.domain.pets.Pet
 import org.example.domain.pets.PetStatus
 
 data class JsonPet(
-  val id: String, val name: String,
+  val id: String,
+  val name: String,
   val category: String,
   val bio: String,
   val status: PetStatus?,

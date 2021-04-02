@@ -7,4 +7,6 @@ dependencies {
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-format-jackson")
   implementation("org.http4k:http4k-client-apache")
+
+  testImplementation("org.http4k:http4k-testing-kotest")
 }
