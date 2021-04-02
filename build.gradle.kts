@@ -15,9 +15,6 @@ allprojects {
   apply(plugin = "kotlin")
   apply(plugin = "kotlin-kapt")
 
-  val compileKotlin: KotlinCompile by tasks
-  compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
-
   group = "org.example"
   version = "1.0-SNAPSHOT"
 
@@ -27,20 +24,30 @@ allprojects {
     maven { url = uri("https://dl.bintray.com/arrow-kt/arrow-kt/") }
   }
 
+  tasks.withType<KotlinCompile> {
+    kotlinOptions {
+      jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+  }
+
+  tasks.withType<Test> {
+    useJUnitPlatform()
+  }
+
   dependencies {
     implementation(kotlin("stdlib"))
-//    implementation(group = "org.jetbrains.kotlinx", name= "kotlinx-coroutines-core", version= "1.0.0")
 
     implementation("io.arrow-kt:arrow-core:$arrowVersion")
     implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
     kapt("io.arrow-kt:arrow-meta:$arrowVersion")
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-arrow:$kotestVersion")
   }
 }
 
 dependencies {
-  implementation(kotlin("stdlib"))
   implementation(project(":infrastructure"))
   implementation(project(":domain"))
 
