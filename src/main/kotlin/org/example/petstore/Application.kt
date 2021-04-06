@@ -16,11 +16,15 @@ import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 import com.typesafe.config.ConfigFactory
 import io.github.config4k.*
+import org.example.infrastructure.pets.repository.SqsPetRepository
 import org.example.petstore.config.ServerConfig
 
 fun main() {
   // Environments
   val petEnv = PetEnvironment(InMemoryPetRepository)
+
+  // AWS Services
+  SqsPetRepository.createNewPetQueue()
 
   // Domain Impl
   val newPets = NewPets(petEnv)
