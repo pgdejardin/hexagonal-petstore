@@ -10,6 +10,7 @@ plugins {
 val http4kVersion: String by rootProject
 val arrowVersion: String by rootProject
 val kotestVersion: String by rootProject
+val config4kVersion: String by rootProject
 
 allprojects {
   apply(plugin = "kotlin")
@@ -40,6 +41,8 @@ allprojects {
     implementation("io.arrow-kt:arrow-core:$arrowVersion")
     implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
     kapt("io.arrow-kt:arrow-meta:$arrowVersion")
+
+    implementation("io.github.config4k:config4k:$config4kVersion")
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
