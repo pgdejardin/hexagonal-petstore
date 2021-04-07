@@ -1,3 +1,3 @@
-package org.example.infrastructure.pets.sqs
+package org.example.infrastructure.sqs
 
 data class SqsConfig(val newPetQueueName: String)
