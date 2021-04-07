@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.FunSpec
 import org.example.domain.pets.NewPets
 import org.example.domain.pets.PetEnvironment
 import org.example.infrastructure.pets.repository.FakePetRepository
+import org.example.infrastructure.pets.repository.FakeSqsPetRepository
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
 import org.http4k.core.Request
@@ -15,7 +16,7 @@ import org.http4k.kotest.shouldHaveBody
 import org.http4k.kotest.shouldHaveStatus
 
 class PetRestEndpointsTest : FunSpec({
-  val petEndpoints = PetRestEndpoints(NewPets(PetEnvironment(FakePetRepository)))
+  val petEndpoints = PetRestEndpoints(NewPets(PetEnvironment(FakePetRepository, FakeSqsPetRepository)))
   val server = ServerFilters.CatchAll().then(petEndpoints.endpoints)
 
   test("GET /pets should return a pet") {

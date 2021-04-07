@@ -1,9 +1,13 @@
 package org.example.petstore
 
+import com.typesafe.config.ConfigFactory
+import io.github.config4k.extract
 import org.example.domain.pets.NewPets
 import org.example.domain.pets.PetEnvironment
 import org.example.infrastructure.pets.api.PetRestEndpoints
 import org.example.infrastructure.pets.repository.InMemoryPetRepository
+import org.example.infrastructure.pets.repository.SqsPetRepository
+import org.example.petstore.config.ServerConfig
 import org.http4k.core.Method
 import org.http4k.core.then
 import org.http4k.filter.AllowAllOriginPolicy
@@ -14,17 +18,13 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
-import com.typesafe.config.ConfigFactory
-import io.github.config4k.*
-import org.example.infrastructure.pets.repository.SqsPetRepository
-import org.example.petstore.config.ServerConfig
 
 fun main() {
-  // Environments
-  val petEnv = PetEnvironment(InMemoryPetRepository)
-
   // AWS Services
   SqsPetRepository.createNewPetQueue()
+
+  // Environments
+  val petEnv = PetEnvironment(InMemoryPetRepository, SqsPetRepository)
 
   // Domain Impl
   val newPets = NewPets(petEnv)

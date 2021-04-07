@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.flatMap
 import org.example.domain.PetErrors
 import org.example.domain.PetErrors.CannotGenerateId
-import org.example.domain.pets.adapter.PetRepository
 import java.util.*
 
 class NewPets(private val env: PetEnvironment) {
@@ -12,5 +11,6 @@ class NewPets(private val env: PetEnvironment) {
     Either.catch { UUID.randomUUID() }
       .mapLeft { CannotGenerateId }
       .flatMap { petRepository.create(pet.copy(id = it)) }
+      .flatMap { env.petProducer.newPetAdded(it) }
   }
 }
