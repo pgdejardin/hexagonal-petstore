@@ -11,6 +11,7 @@ val http4kVersion: String by rootProject
 val arrowVersion: String by rootProject
 val kotestVersion: String by rootProject
 val config4kVersion: String by rootProject
+val logbackVersion: String by rootProject
 
 allprojects {
   apply(plugin = "kotlin")
@@ -42,7 +43,7 @@ allprojects {
     implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
     kapt("io.arrow-kt:arrow-meta:$arrowVersion")
 
-    implementation("io.github.config4k:config4k:$config4kVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
@@ -58,4 +59,6 @@ dependencies {
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-client-apache")
+
+  implementation("io.github.config4k:config4k:$config4kVersion")
 }

@@ -1,5 +1,6 @@
 val http4kVersion: String by rootProject
 val config4kVersion: String by rootProject
+val awsSdkVersion: String by rootProject
 
 dependencies {
   implementation(project(":domain"))
@@ -11,8 +12,9 @@ dependencies {
 
   implementation("io.github.config4k:config4k:$config4kVersion")
 
-  implementation(platform("software.amazon.awssdk:bom:2.15.0"))
+  implementation(platform("software.amazon.awssdk:bom:$awsSdkVersion"))
   implementation("software.amazon.awssdk:sqs")
+
 
   testImplementation("org.http4k:http4k-testing-kotest")
 }
