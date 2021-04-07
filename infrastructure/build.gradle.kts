@@ -1,6 +1,7 @@
 val http4kVersion: String by rootProject
 val config4kVersion: String by rootProject
 val awsSdkVersion: String by rootProject
+val jacksonVersion: String by rootProject
 
 dependencies {
   implementation(project(":domain"))
@@ -15,6 +16,7 @@ dependencies {
   implementation(platform("software.amazon.awssdk:bom:$awsSdkVersion"))
   implementation("software.amazon.awssdk:sqs")
 
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
   testImplementation("org.http4k:http4k-testing-kotest")
 }
