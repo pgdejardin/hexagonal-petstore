@@ -1,8 +1,8 @@
 package org.example.domain
 
-interface Errors
+sealed class Errors : Throwable()
 
-sealed class PetErrors : Errors, Throwable() {
+sealed class PetErrors : Errors() {
   object CannotGenerateId : PetErrors()
   object CannotSavePetInDB : PetErrors()
   object CannotSerializePet : PetErrors()
@@ -14,7 +14,7 @@ sealed class PetErrors : Errors, Throwable() {
   }
 }
 
-sealed class SqsFailures : Errors, Throwable() {
+sealed class SqsFailures : Errors() {
   class CannotCreateSqsQueue(private val throwable: Throwable) : SqsFailures() {
     override fun toString(): String {
       return throwable.toString()
@@ -34,6 +34,6 @@ sealed class SqsFailures : Errors, Throwable() {
   }
 }
 
-sealed class TechnicalFailures: Errors, Throwable() {
+sealed class TechnicalFailures: Errors() {
   object SerializationFailure: TechnicalFailures()
 }
