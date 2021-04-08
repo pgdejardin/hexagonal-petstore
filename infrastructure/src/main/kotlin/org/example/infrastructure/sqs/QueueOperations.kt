@@ -10,7 +10,6 @@ import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 import software.amazon.awssdk.services.sqs.model.SendMessageResponse
 
-
 object QueueOperations {
   fun createQueue(name: String): Either<SqsFailures, String> {
     val createQueueRequest = CreateQueueRequest.builder().queueName(name).build()
@@ -36,5 +35,4 @@ object QueueOperations {
         .build()
     )
   }.mapLeft { CannotSendMessageInQueue(it) }
-
 }

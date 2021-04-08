@@ -1,6 +1,9 @@
 package org.example.infrastructure.pets.api
 
+import arrow.core.Either
+import org.example.domain.PetErrors
 import org.example.domain.pets.NewPets
+import org.example.domain.pets.Pet
 import org.example.domain.pets.PetStatus
 import org.http4k.core.Body
 import org.http4k.core.Method.GET
@@ -9,6 +12,7 @@ import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.CREATED
 import org.http4k.core.Status.Companion.OK
+import org.http4k.core.Status.Companion.SERVICE_UNAVAILABLE
 import org.http4k.core.with
 import org.http4k.format.Jackson.auto
 import org.http4k.routing.bind
@@ -24,7 +28,13 @@ class PetRestEndpoints(private val newPets: NewPets) {
     },
     "/" bind POST to { req ->
       val received = createPetMarshaller(req)
-      newPets.create(received.toPet()).fold({ Response(BAD_REQUEST) }, { Response(CREATED).with(jsonPetMarshaller of it.toJsonPet()) })
+      when (val result: Either<PetErrors, Pet> = newPets.create(received.toPet())) {
+          is Either.Right -> Response(CREATED).with(jsonPetMarshaller of  result.value.toJsonPet())
+          is Either.Left -> when(result.value) {
+            is PetErrors.CannotSavePetInDB -> Response(SERVICE_UNAVAILABLE)
+            else -> Response(BAD_REQUEST)
+          }
+        }
     }
   )
 }

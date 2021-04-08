@@ -8,9 +8,8 @@ import java.util.*
 
 class NewPets(private val env: PetEnvironment) {
   fun create(pet: Pet): Either<PetErrors, Pet> = with(env) {
-    Either.catch { UUID.randomUUID() }
-      .mapLeft { CannotGenerateId }
-      .flatMap { petRepository.create(pet.copy(id = it)) }
-      .flatMap { env.petProducer.newPetAdded(it) }
+    val id = Either.catch { UUID.randomUUID() }.mapLeft { CannotGenerateId }
+    val petCreated = id.flatMap { petRepository.create(pet.copy(id = it)) }
+    petCreated.flatMap { petProducer.newPetAdded(it) }
   }
 }
